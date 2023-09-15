@@ -1,5 +1,9 @@
 import NextAuth from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import { PrismaAdapter } from "@auth/prisma-adapter";
+import { PrismaClient } from "@prisma/client";
+
+const prisma = new PrismaClient();
 
 if (!process.env.GITHUB_ID) {
   throw new Error("Missing GITHUB_ID");
@@ -15,6 +19,7 @@ const authOptions = {
       clientSecret: process.env.GITHUB_SECRET,
     }),
   ],
+  adapter: PrismaAdapter(prisma),
 };
 
 const handler = NextAuth(authOptions);
