@@ -66,6 +66,6 @@ export async function GET(request: Request) {
   // TODO: GitHubリポジトリのデータをOpenAIに送信してアドバイスを取得する
 
   return NextResponse.json({
-    content: "dummy",
+    content: data,
   });
 }
