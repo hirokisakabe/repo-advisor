@@ -1,5 +1,5 @@
-import { LoginButton } from "@/components";
+import { RootPage } from "@/components/pages";
 
 export default function Home() {
-  return <LoginButton />;
+  return <RootPage />;
 }
