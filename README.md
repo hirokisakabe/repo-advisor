@@ -1,1 +1,1 @@
-# github-activity-advisor
+# repo-advisor
