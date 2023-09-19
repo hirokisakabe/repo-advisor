@@ -1,6 +1,6 @@
 "use client";
 
-import { Text, Callout } from "@tremor/react";
+import { Callout } from "@tremor/react";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
 import { useAdvice } from "@/lib/client";
 
@@ -11,14 +11,29 @@ export function Advice({ repoFullName }: { repoFullName: string }) {
 
   if (isLoading) {
     return (
-      <div className="py-1">
-        <Text>Loading advice...</Text>
-      </div>
+      <Callout
+        className="mt-4"
+        title="アドバイス"
+        icon={InformationCircleIcon}
+        color="teal"
+      >
+        Loading...
+      </Callout>
     );
   }
 
   if (error) {
-    return <div>Failed to load advice: {error.message}</div>;
+    return (
+      <Callout
+        className="mt-4"
+        title="アドバイス"
+        icon={InformationCircleIcon}
+        color="teal"
+      >
+        アドバイスの取得に失敗しました。 <br />
+        エラー : {error.message}
+      </Callout>
+    );
   }
 
   return (
