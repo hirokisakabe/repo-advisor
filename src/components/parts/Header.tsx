@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { Typography } from "../ui";
+import { Metric } from "@tremor/react";
 
 export function Header() {
   return (
     <div className="flex pt-2">
       <div className="w-full">
         <Link href="/dashboard">
-          <Typography size="text-xl">Repo Advisor</Typography>
+          <Metric>Repo Advisor</Metric>
         </Link>
       </div>
     </div>
