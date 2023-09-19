@@ -71,22 +71,19 @@ export async function GET(
 
   const commitsData = await commits.json();
 
-  // OpenAIのtoken数の制限に引っかからないように、commitの数を制限する
-  const slicedCommitsData = commitsData
-    .map((commit: any) => ({
-      message: commit.message,
-      committer: JSON.stringify(commit.commit.committer),
-    }))
-    .slice(0, 4);
+  const filteredCommitsData = commitsData.map((commit: any) => ({
+    message: commit.message,
+    committer: JSON.stringify(commit.commit.committer),
+  }));
 
-  console.log({ commitsData: JSON.stringify(slicedCommitsData) });
+  console.log({ commitsData: JSON.stringify(filteredCommitsData) });
 
   // GitHubリポジトリのデータをOpenAIに送信してアドバイスを取得する
 
   const openai = new OpenAI();
 
   const content = `Based on the commit information of this GitHub repository, what advice do you have for the development process? Please provide suggestions regarding improvements and best practices by examining specific commits or patterns of changes. repo name: ${full_name} commits: ${JSON.stringify(
-    slicedCommitsData,
+    filteredCommitsData,
   )} Please answer in Japanese.`;
 
   console.log("content", content);
