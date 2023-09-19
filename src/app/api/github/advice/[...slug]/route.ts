@@ -59,5 +59,5 @@ export async function GET(
 
   const advice = await fetchFromOpenAIChatCompletions({ content });
 
-  return NextResponse.json({ repoFullName, advice });
+  return NextResponse.json({ repoFullName, advice: advice.value });
 }
