@@ -63,6 +63,17 @@ export async function GET(request: Request) {
 
   console.log({ data });
 
+  if (!res.ok) {
+    console.error("Failed to get repos.");
+
+    return NextResponse.json(
+      {
+        error: "Failed to get repos.",
+      },
+      { status: 500 },
+    );
+  }
+
   return NextResponse.json({
     content: data,
   });
