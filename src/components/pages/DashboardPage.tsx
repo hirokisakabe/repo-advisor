@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useRepo } from "@/lib/client";
+import Link from "next/link";
 
 export function DashboardPage() {
   const { status } = useSession({
@@ -32,7 +33,7 @@ export function DashboardPage() {
     <main className="px-3 py-1">
       {data?.content?.map((d: any) => (
         <div key={d.id} className="px-3 py-1">
-          {d.name}
+          <Link href={`/dashboard/repo/${d.full_name}`}>{d.full_name}</Link>
         </div>
       ))}
     </main>
