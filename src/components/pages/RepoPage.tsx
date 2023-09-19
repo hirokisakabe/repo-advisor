@@ -3,6 +3,7 @@
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCommits } from "@/lib/client";
+import { Advice } from "../parts";
 
 export function RepoPage({ params }: { params: { slug: string[] } }) {
   const { status } = useSession({
@@ -45,6 +46,7 @@ export function RepoPage({ params }: { params: { slug: string[] } }) {
             </div>
           </div>
         ))}
+        <Advice repoFullName={repoFullName} />
       </div>
     </main>
   );
