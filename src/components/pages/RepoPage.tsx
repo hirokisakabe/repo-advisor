@@ -56,9 +56,11 @@ export function RepoPage({ params }: { params: { slug: string[] } }) {
             <List>
               {data.commits.map((commit: any) => (
                 <ListItem key={commit.sha}>
-                  <span>{commit.sha}</span>
-                  <span>{commit.commit.message}</span>
-                  <span>{JSON.stringify(commit.commit.committer)}</span>
+                  <div>
+                    <div>{commit.sha}</div>
+                    <div>{commit.commit.message}</div>
+                    <div>{JSON.stringify(commit.commit.committer)}</div>
+                  </div>
                 </ListItem>
               ))}
             </List>
