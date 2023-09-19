@@ -69,6 +69,17 @@ export async function GET(
     },
   );
 
+  if (!commits.ok) {
+    console.error("Failed to get commits.");
+
+    return NextResponse.json(
+      {
+        error: "Failed to get commits.",
+      },
+      { status: 500 },
+    );
+  }
+
   const commitsData = await commits.json();
 
   const filteredCommitsData = commitsData.map((commit: any) => ({
