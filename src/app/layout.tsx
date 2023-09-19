@@ -1,4 +1,4 @@
-import { NextAuthProvider } from "@/components";
+import { NextAuthProvider } from "@/components/providers";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";

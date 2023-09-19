@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCommits } from "@/lib/client";
-import { Advice, Header } from "../parts";
+import { Advice, ErrorInformation, Header, Loading } from "../parts";
 import { Title, Subtitle, Text, List, ListItem, Card } from "@tremor/react";
 
 export function RepoPage({ params }: { params: { slug: string[] } }) {
@@ -19,19 +19,11 @@ export function RepoPage({ params }: { params: { slug: string[] } }) {
   });
 
   if (status === "loading" || isLoading) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div>Loading...</div>
-      </main>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div>Error: {error.message}</div>
-      </main>
-    );
+    return <ErrorInformation error={error} />;
   }
 
   return (

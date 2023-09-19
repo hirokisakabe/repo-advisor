@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useRepo } from "@/lib/client";
 import Link from "next/link";
-import { Header } from "../parts";
+import { Header, Loading, ErrorInformation } from "../parts";
 import { Title } from "@tremor/react";
 
 export function DashboardPage() {
@@ -16,19 +16,11 @@ export function DashboardPage() {
   const { data, error, isLoading } = useRepo();
 
   if (status === "loading" || isLoading) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div>Loading...</div>
-      </main>
-    );
+    return <Loading />;
   }
 
   if (error) {
-    return (
-      <main className="flex min-h-screen flex-col items-center justify-between p-24">
-        <div>Error: {error.message}</div>
-      </main>
-    );
+    return <ErrorInformation error={error} />;
   }
 
   return (
