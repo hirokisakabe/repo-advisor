@@ -5,7 +5,7 @@ import { useSession } from "next-auth/react";
 import { useRepo } from "@/lib/client";
 import Link from "next/link";
 import { Header } from "../parts";
-import { Typography } from "../ui";
+import { Title } from "@tremor/react";
 
 export function DashboardPage() {
   const { status } = useSession({
@@ -38,7 +38,7 @@ export function DashboardPage() {
       </div>
       <main className="px-3 py-1">
         <div className="px-3 py-1">
-          <Typography>リポジトリ一覧</Typography>
+          <Title>リポジトリ一覧</Title>
         </div>
         {data?.content?.map((d: any) => (
           <div key={d.id} className="px-3 py-1">

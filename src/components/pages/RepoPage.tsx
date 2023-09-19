@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useCommits } from "@/lib/client";
 import { Advice, Header } from "../parts";
-import { Typography } from "../ui";
+import { Title, Subtitle, Text, List, ListItem, Card } from "@tremor/react";
 
 export function RepoPage({ params }: { params: { slug: string[] } }) {
   const { status } = useSession({
@@ -41,38 +41,28 @@ export function RepoPage({ params }: { params: { slug: string[] } }) {
       </div>
       <main className="px-3 py-1">
         <div className="px-3 py-1">
-          <Typography>リポジトリ詳細</Typography>
+          <Title>リポジトリ詳細</Title>
         </div>
         <div className="px-3 py-1">
-          <Typography>リポジトリ名</Typography>
-          <Typography>{repoFullName}</Typography>
+          <Subtitle>リポジトリ名</Subtitle>
+          <Text>{repoFullName}</Text>
         </div>
         <div className="px-3 py-1">
           <Advice repoFullName={repoFullName} />
         </div>
         <div className="px-3 py-1">
-          <div className="py-1">
-            <Typography>コミット一覧</Typography>
-          </div>
-          {data.commits.map((commit: any) => (
-            <div key={commit.sha} className="flex">
-              <div className="px-1 py-1">
-                <Typography>{commit.sha}</Typography>
-              </div>
-              <div className="px-1 py-1">
-                <div>
-                  <Typography>message</Typography>
-                  <Typography>{commit.commit.message}</Typography>
-                </div>
-                <div>
-                  <Typography>committer</Typography>
-                  <Typography>
-                    {JSON.stringify(commit.commit.committer)}
-                  </Typography>
-                </div>
-              </div>
-            </div>
-          ))}
+          <Card>
+            <Subtitle>コミット一覧</Subtitle>
+            <List>
+              {data.commits.map((commit: any) => (
+                <ListItem key={commit.sha}>
+                  <span>{commit.sha}</span>
+                  <span>{commit.commit.message}</span>
+                  <span>{JSON.stringify(commit.commit.committer)}</span>
+                </ListItem>
+              ))}
+            </List>
+          </Card>
         </div>
       </main>
     </div>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useAdvice } from "@/lib/client";
-import { Typography } from "../ui";
+import { Text, Callout } from "@tremor/react";
+import { InformationCircleIcon } from "@heroicons/react/24/solid";
 
 export function Advice({ repoFullName }: { repoFullName: string }) {
   const { data, error, isLoading } = useAdvice({
@@ -11,7 +12,7 @@ export function Advice({ repoFullName }: { repoFullName: string }) {
   if (isLoading) {
     return (
       <div className="py-1">
-        <Typography>Loading advice...</Typography>
+        <Text>Loading advice...</Text>
       </div>
     );
   }
@@ -21,9 +22,13 @@ export function Advice({ repoFullName }: { repoFullName: string }) {
   }
 
   return (
-    <div className="py-1">
-      <Typography>アドバイス</Typography>
-      <Typography>{data.advice}</Typography>
-    </div>
+    <Callout
+      className="mt-4"
+      title="アドバイス"
+      icon={InformationCircleIcon}
+      color="teal"
+    >
+      {data.advice}
+    </Callout>
   );
 }
