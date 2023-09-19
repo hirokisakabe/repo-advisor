@@ -85,7 +85,7 @@ export async function GET(
 
   const openai = new OpenAI();
 
-  const content = `Please advise any information from the following GitHub repositories. repo name: ${full_name} commits: ${JSON.stringify(
+  const content = `Based on the commit information of this GitHub repository, what advice do you have for the development process? Please provide suggestions regarding improvements and best practices by examining specific commits or patterns of changes. repo name: ${full_name} commits: ${JSON.stringify(
     slicedCommitsData,
   )} Please answer in Japanese.`;
 
