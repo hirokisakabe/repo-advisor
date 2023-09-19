@@ -1,5 +1,5 @@
-import { fetchFromGitHubApi, getAccessToken } from "@/lib/server";
 import { NextResponse } from "next/server";
+import { fetchFromGitHubApi, getAccessToken } from "@/lib/server";
 
 export async function GET(request: Request) {
   const accessToken = await getAccessToken();

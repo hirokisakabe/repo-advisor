@@ -1,8 +1,8 @@
 "use client";
 
-import { useAdvice } from "@/lib/client";
 import { Text, Callout } from "@tremor/react";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import { useAdvice } from "@/lib/client";
 
 export function Advice({ repoFullName }: { repoFullName: string }) {
   const { data, error, isLoading } = useAdvice({

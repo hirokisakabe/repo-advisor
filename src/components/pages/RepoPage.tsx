@@ -2,9 +2,9 @@
 
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useCommits } from "@/lib/client";
-import { Advice, ErrorInformation, Header, Loading } from "../parts";
 import { Title, Subtitle, Text, List, ListItem, Card } from "@tremor/react";
+import { Advice, ErrorInformation, Header, Loading } from "../parts";
+import { useCommits } from "@/lib/client";
 
 export function RepoPage({ params }: { params: { slug: string[] } }) {
   const { status } = useSession({
