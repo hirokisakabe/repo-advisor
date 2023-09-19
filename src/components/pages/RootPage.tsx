@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { LoginButton } from "..";
+import { LoginButton } from "../parts";
 import { redirect } from "next/navigation";
 
 export function RootPage() {
@@ -20,7 +20,7 @@ export function RootPage() {
   }
 
   return (
-    <main>
+    <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <LoginButton />
     </main>
   );
