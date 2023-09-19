@@ -1,76 +1,36 @@
-import { nextAuth } from "@/lib";
-import { PrismaClient } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import {
+  fetchFromGitHubApi,
+  fetchFromOpenAIChatCompletions,
+  getAccessToken,
+} from "@/lib/server";
 import { NextResponse } from "next/server";
-import OpenAI from "openai";
-
-const prisma = new PrismaClient();
 
 export async function GET(
   request: Request,
   { params }: { params: { slug: string[] } },
 ) {
-  const session = await getServerSession(nextAuth.authOptions);
+  const accessToken = await getAccessToken();
 
-  if (!session) {
-    return NextResponse.json({
-      error:
-        "You must be signed in to view the protected content on this page.",
-    });
-  }
+  if (accessToken.isFailure) {
+    console.error(accessToken.error);
 
-  // ユーザーIDを取得する
-
-  // @ts-ignore
-  const userId = session?.user?.id;
-
-  if (typeof userId !== "string") {
-    console.error("Failed to get userId.");
-
-    return NextResponse.json({
-      error:
-        "You must be signed in to view the protected content on this page.",
-    });
-  }
-
-  // ユーザーIDからアクセストークンを取得する
-  const account = await prisma.account.findFirst({ where: { userId } });
-
-  if (!account) {
-    console.error("Failed to get account.");
-
-    return NextResponse.json({
-      error: "Failed to get advice.",
-    });
-  }
-
-  const accessToken = account.access_token;
-
-  if (!accessToken) {
-    console.error("Failed to get accessToken.");
-
-    return NextResponse.json({
-      error: "Failed to get advice.",
-    });
-  }
-
-  // アクセストークンを用いて、GitHubリポジトリのデータを取得する
-
-  const full_name = params.slug.join("/");
-
-  const commits = await fetch(
-    `https://api.github.com/repos/${full_name}/commits`,
-    {
-      headers: {
-        Accept: "application/vnd.github+json",
-        Authorization: `Bearer ${accessToken}`,
-        "X-GitHub-Api-Version": "2022-11-28",
+    return NextResponse.json(
+      {
+        error: "Failed to get advice.",
       },
-    },
-  );
+      { status: 500 },
+    );
+  }
 
-  if (!commits.ok) {
-    console.error("Failed to get commits.");
+  const repoFullName = params.slug.join("/");
+
+  const commits = await fetchFromGitHubApi({
+    url: `https://api.github.com/repos/${repoFullName}/commits`,
+    accessToken: accessToken.value,
+  });
+
+  if (commits.isFailure) {
+    console.error(commits.error);
 
     return NextResponse.json(
       {
@@ -80,40 +40,24 @@ export async function GET(
     );
   }
 
-  const commitsData = await commits.json();
-
-  const filteredCommitsData = commitsData.map((commit: any) => ({
+  const commitsDataForOpenAI = commits.value.map((commit: any) => ({
     message: commit.message,
     committer: JSON.stringify(commit.commit.committer),
   }));
 
-  console.log({ commitsData: JSON.stringify(filteredCommitsData) });
+  console.log("commitsDataForOpenAI", JSON.stringify(commitsDataForOpenAI));
 
-  // GitHubリポジトリのデータをOpenAIに送信してアドバイスを取得する
+  const content = `
+  Based on the commit information of this GitHub repository, what advice do you have for the development process? 
+  Please provide suggestions regarding improvements and best practices by examining specific commits or patterns of changes. 
+  
+  repo name: ${repoFullName} 
+  commits: ${JSON.stringify(commitsDataForOpenAI)} 
+  
+  Please answer in Japanese.
+  `;
 
-  const openai = new OpenAI();
+  const advice = await fetchFromOpenAIChatCompletions({ content });
 
-  const content = `Based on the commit information of this GitHub repository, what advice do you have for the development process? Please provide suggestions regarding improvements and best practices by examining specific commits or patterns of changes. repo name: ${full_name} commits: ${JSON.stringify(
-    filteredCommitsData,
-  )} Please answer in Japanese.`;
-
-  console.log("content", content);
-
-  const completion = await openai.chat.completions.create({
-    messages: [
-      {
-        role: "user",
-        content,
-      },
-    ],
-    model: "gpt-3.5-turbo",
-  });
-
-  console.log(completion);
-  console.log(completion.choices[0].message.content);
-
-  return NextResponse.json({
-    repoFullName: full_name,
-    advice: completion.choices[0].message.content,
-  });
+  return NextResponse.json({ repoFullName, advice });
 }
