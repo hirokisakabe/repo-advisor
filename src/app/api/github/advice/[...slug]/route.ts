@@ -1,9 +1,9 @@
+import { NextResponse } from "next/server";
 import {
   fetchFromGitHubApi,
   fetchFromOpenAIChatCompletions,
   getAccessToken,
 } from "@/lib/server";
-import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,

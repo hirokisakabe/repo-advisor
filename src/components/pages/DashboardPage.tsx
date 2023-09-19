@@ -2,10 +2,10 @@
 
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { useRepo } from "@/lib/client";
 import Link from "next/link";
-import { Header, Loading, ErrorInformation } from "../parts";
 import { Title } from "@tremor/react";
+import { Header, Loading, ErrorInformation } from "../parts";
+import { useRepo } from "@/lib/client";
 
 export function DashboardPage() {
   const { status } = useSession({
