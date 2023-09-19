@@ -2,6 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { LoginButton } from "..";
+import { redirect } from "next/navigation";
 
 export function RootPage() {
   const { status } = useSession();
@@ -12,6 +13,10 @@ export function RootPage() {
         <div>Loading...</div>
       </main>
     );
+  }
+
+  if (status === "authenticated") {
+    redirect("/dashboard");
   }
 
   return (
