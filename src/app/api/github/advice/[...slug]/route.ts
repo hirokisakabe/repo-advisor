@@ -5,6 +5,9 @@ import {
   getAccessToken,
 } from "@/lib/server";
 
+export const maxDuration = 60 * 5;
+export const dynamic = "force-dynamic";
+
 export async function GET(
   request: Request,
   { params }: { params: { slug: string[] } },
@@ -41,15 +44,17 @@ export async function GET(
   }
 
   const commitsDataForOpenAI = commits.value.map((commit: any) => ({
-    message: commit.message,
-    committer: JSON.stringify(commit.commit.committer),
+    message: commit.commit.message,
+    committer: commit.commit.committer.name,
+    date: commit.commit.committer.date,
   }));
 
   console.log("commitsDataForOpenAI", JSON.stringify(commitsDataForOpenAI));
 
   const content = `
-  Based on the commit information of this GitHub repository, what advice do you have for the development process? 
-  Please provide suggestions regarding improvements and best practices by examining specific commits or patterns of changes. 
+  Based on the commit information in this GitHub repository, 
+  please offer advice on improving the development process 
+  and suggest best practices by analyzing specific commits or patterns of changes.
   
   repo name: ${repoFullName} 
   commits: ${JSON.stringify(commitsDataForOpenAI)} 
