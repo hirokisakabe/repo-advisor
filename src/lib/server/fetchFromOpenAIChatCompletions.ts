@@ -22,7 +22,7 @@ export async function fetchFromOpenAIChatCompletions({
       model: "gpt-3.5-turbo",
     });
 
-    console.log("completion", JSON.stringify(completion));
+    console.log("completion", completion);
 
     return Result.success(completion.choices[0].message.content);
   } catch (error) {
