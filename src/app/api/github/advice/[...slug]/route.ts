@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string[] } },
+  { params }: { params: { slug: string[] } }
 ) {
   const accessToken = await getAccessToken();
 
@@ -21,7 +21,7 @@ export async function GET(
       {
         error: "Failed to get advice.",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
@@ -39,15 +39,17 @@ export async function GET(
       {
         error: "Failed to get commits.",
       },
-      { status: 500 },
+      { status: 500 }
     );
   }
 
-  const commitsDataForOpenAI = commits.value.map((commit: any) => ({
-    message: commit.commit.message,
-    committer: commit.commit.committer.name,
-    date: commit.commit.committer.date,
-  }));
+  const commitsDataForOpenAI = commits.value
+    .slice(0, 10)
+    .map((commit: any) => ({
+      message: commit.commit.message,
+      committer: commit.commit.committer.name,
+      date: commit.commit.committer.date,
+    }));
 
   console.log("commitsDataForOpenAI", JSON.stringify(commitsDataForOpenAI));
 
