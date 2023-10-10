@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/github/advice/[...slug]/route.ts": {
+    "api/github/advice/[...slug]": {
       "maxDuration": 300
     }
   }
