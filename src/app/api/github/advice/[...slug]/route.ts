@@ -5,6 +5,8 @@ import {
   getAccessToken,
 } from "@/lib/server";
 
+export const maxDuration = 120;
+
 export async function GET(
   request: Request,
   { params }: { params: { slug: string[] } },
