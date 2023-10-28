@@ -57,6 +57,8 @@ export async function GET(
   commits: ${JSON.stringify(commitsDataForOpenAI)} 
   
   Please answer in Japanese.
+
+  advice:
   `;
 
   const advice = await fetchFromOpenAIChatCompletions({ content });
