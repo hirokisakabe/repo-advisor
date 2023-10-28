@@ -2,6 +2,7 @@
 
 import { Callout } from "@tremor/react";
 import { InformationCircleIcon } from "@heroicons/react/24/solid";
+import Markdown from "react-markdown";
 import { useAdvice } from "@/lib/client";
 
 export function Advice({ repoFullName }: { repoFullName: string }) {
@@ -43,7 +44,9 @@ export function Advice({ repoFullName }: { repoFullName: string }) {
       icon={InformationCircleIcon}
       color="teal"
     >
-      {data.advice}
+      <article className="prose prose-sm max-w-none">
+        <Markdown>{data.advice}</Markdown>
+      </article>
     </Callout>
   );
 }
