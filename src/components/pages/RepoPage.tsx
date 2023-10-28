@@ -2,7 +2,15 @@
 
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { Title, Subtitle, Text, List, ListItem, Card } from "@tremor/react";
+import {
+  Title,
+  Subtitle,
+  Text,
+  List,
+  ListItem,
+  Card,
+  Bold,
+} from "@tremor/react";
 import { Advice, ErrorInformation, Header, Loading } from "../parts";
 import { useCommits } from "@/lib/client";
 
@@ -49,9 +57,14 @@ export function RepoPage({ params }: { params: { slug: string[] } }) {
               {data.commits.map((commit: any) => (
                 <ListItem key={commit.sha}>
                   <div>
-                    <div>{commit.sha}</div>
-                    <div>{commit.commit.message}</div>
-                    <div>{JSON.stringify(commit.commit.committer)}</div>
+                    <Text>
+                      <Bold>{commit.sha}</Bold>
+                    </Text>
+                    <Text>
+                      {`Author: ${commit.commit.committer.name} (${commit.commit.committer.email})`}
+                    </Text>
+                    <Text>Date: {commit.commit.committer.date}</Text>
+                    <Text className="pl-3 py-2">{commit.commit.message}</Text>
                   </div>
                 </ListItem>
               ))}
