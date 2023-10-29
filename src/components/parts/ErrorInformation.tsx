@@ -1,9 +1,9 @@
 import { Center } from "./Center";
 
-export function ErrorInformation({ error }: { error: Error }) {
+export function ErrorInformation({ message }: { message: string }) {
   return (
     <Center>
-      <div>Error: {error.message}</div>
+      <div>Error: {message}</div>
     </Center>
   );
 }

@@ -1,7 +1,4 @@
-"use client";
-
 import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
 import {
   Title,
   Subtitle,
@@ -11,27 +8,25 @@ import {
   Card,
   Bold,
 } from "@tremor/react";
-import { Advice, ErrorInformation, Header, Loading } from "../parts";
-import { useCommits } from "@/lib/client";
+import { Advice, ErrorInformation, Header } from "../parts";
+import { fetchFromGitHubApi, getAccessToken } from "@/lib/server";
 
-export function RepoPage({ params }: { params: { slug: string[] } }) {
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated: () => redirect("/"),
-  });
+export async function RepoPage({ params }: { params: { slug: string[] } }) {
+  const accessToken = await getAccessToken();
+
+  if (accessToken.isFailure) {
+    redirect("/");
+  }
 
   const repoFullName = params.slug.join("/");
 
-  const { data, error, isLoading } = useCommits({
-    repoFullName,
+  const commits = await fetchFromGitHubApi({
+    url: `https://api.github.com/repos/${repoFullName}/commits`,
+    accessToken: accessToken.value,
   });
 
-  if (status === "loading" || isLoading) {
-    return <Loading />;
-  }
-
-  if (error) {
-    return <ErrorInformation error={error} />;
+  if (commits.isFailure) {
+    return <ErrorInformation message={commits.error} />;
   }
 
   return (
@@ -54,7 +49,7 @@ export function RepoPage({ params }: { params: { slug: string[] } }) {
           <Card>
             <Subtitle>コミット一覧</Subtitle>
             <List>
-              {data.commits.map((commit: any) => (
+              {commits.value.map((commit: any) => (
                 <ListItem key={commit.sha}>
                   <div>
                     <Text>
