@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Title } from "@tremor/react";
-import { Header, ErrorInformation } from "../parts";
+import { ErrorInformation } from "../parts";
 import { fetchFromGitHubApi, getAccessToken } from "@/lib/server";
 
 export async function DashboardPage() {
@@ -21,27 +21,22 @@ export async function DashboardPage() {
   }
 
   return (
-    <div>
-      <div className="px-5 py-1">
-        <Header />
+    <>
+      <div className="px-3 py-1">
+        <Title>リポジトリ一覧</Title>
       </div>
-      <main className="px-3 py-1">
-        <div className="px-3 py-1">
-          <Title>リポジトリ一覧</Title>
-        </div>
-        {repos.value?.map((d: any) => (
-          <div key={d.id} className="px-3 py-1">
-            <div className="px-4 rounded-lg">
-              <Link
-                className="text-blue-700 hover:underline"
-                href={`/dashboard/repo/${d.full_name}`}
-              >
-                {d.full_name}
-              </Link>
-            </div>
+      {repos.value?.map((d: any) => (
+        <div key={d.id} className="px-3 py-1">
+          <div className="px-4 rounded-lg">
+            <Link
+              className="text-blue-700 hover:underline"
+              href={`/dashboard/repo/${d.full_name}`}
+            >
+              {d.full_name}
+            </Link>
           </div>
-        ))}
-      </main>
-    </div>
+        </div>
+      ))}
+    </>
   );
 }
