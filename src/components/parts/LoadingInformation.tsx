@@ -1,6 +1,6 @@
 import { Center } from "./Center";
 
-export function Loading() {
+export function LoadingInformation() {
   return (
     <Center>
       <div>Loading...</div>

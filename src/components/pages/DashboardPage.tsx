@@ -1,26 +1,23 @@
-"use client";
-
 import { redirect } from "next/navigation";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { Title } from "@tremor/react";
-import { Header, Loading, ErrorInformation } from "../parts";
-import { useRepo } from "@/lib/client";
+import { Header, ErrorInformation } from "../parts";
+import { fetchFromGitHubApi, getAccessToken } from "@/lib/server";
 
-export function DashboardPage() {
-  const { status } = useSession({
-    required: true,
-    onUnauthenticated: () => redirect("/"),
-  });
+export async function DashboardPage() {
+  const accessToken = await getAccessToken();
 
-  const { data, error, isLoading } = useRepo();
-
-  if (status === "loading" || isLoading) {
-    return <Loading />;
+  if (accessToken.isFailure) {
+    redirect("/");
   }
 
-  if (error) {
-    return <ErrorInformation error={error} />;
+  const repos = await fetchFromGitHubApi({
+    url: "https://api.github.com/user/repos",
+    accessToken: accessToken.value,
+  });
+
+  if (repos.isFailure) {
+    return <ErrorInformation message={repos.error} />;
   }
 
   return (
@@ -32,7 +29,7 @@ export function DashboardPage() {
         <div className="px-3 py-1">
           <Title>リポジトリ一覧</Title>
         </div>
-        {data?.content?.map((d: any) => (
+        {repos.value?.map((d: any) => (
           <div key={d.id} className="px-3 py-1">
             <div className="px-4 rounded-lg">
               <Link

@@ -1,17 +1,12 @@
-"use client";
-
-import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
-import { Center, Loading, LoginButton } from "../parts";
+import { getServerSession } from "next-auth";
+import { Center, LoginButton } from "../parts";
+import { nextAuth } from "@/lib";
 
-export function RootPage() {
-  const { status } = useSession();
+export async function RootPage() {
+  const session = await getServerSession(nextAuth.authOptions);
 
-  if (status === "loading") {
-    return <Loading />;
-  }
-
-  if (status === "authenticated") {
+  if (session) {
     redirect("/dashboard");
   }
 
